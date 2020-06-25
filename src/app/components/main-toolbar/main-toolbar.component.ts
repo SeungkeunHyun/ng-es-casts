@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SearchESService } from 'src/app/core/services/search-es.service';
 
 @Component({
   selector: 'app-main-toolbar',
@@ -6,9 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./main-toolbar.component.css']
 })
 export class MainToolbarComponent implements OnInit {
-
-  constructor() { }
-
+  private exchangeRates: Object[];
+  constructor(private searchESService: SearchESService) { }
+  menus = ['exchange rate', 'realestate', 'stocks'];
   ngOnInit(): void {
   }
 
