@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../docker/volumes/nifi/interfaces/scripts"
+		}
+	],
+	"settings": {
+		"files.eol": "\n"
+	}
+}

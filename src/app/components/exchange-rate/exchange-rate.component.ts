@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SearchESService } from 'src/app/core/services/search-es.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-exchange-rate',
@@ -9,18 +11,34 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./exchange-rate.component.css']
 })
 export class ExchangeRateComponent implements OnInit {
-  dataSource$: Observable<Object[]>;
+  dataSource: MatTableDataSource<Object[]>;
   columnsToDisplay: Object[];
   currency_count: number = 0;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   esQuery = {
     "size": 0,
-    "sort": [
-      {
-        "timestamp": {
-          "order": "desc"
+    "aggs": {
+      "group": {
+        "terms": {
+          "field": "cur_unit.keyword",
+          "size": 1000
+        },
+        "aggs": {
+          "group_docs": {
+            "top_hits": {
+              "size": 1,
+              "sort": [
+                {
+                  "timestamp": {
+                    "order": "desc"
+                  }
+                }
+              ]
+            }
+          }
         }
       }
-    ]
+    }
   };
   esQueryCurrencies = {
     "size": 0,
@@ -35,15 +53,12 @@ export class ExchangeRateComponent implements OnInit {
   constructor(private searchESService: SearchESService) { }
 
   ngOnInit(): void {
-    this.searchESService.search('exchangerate', this.esQueryCurrencies).subscribe(dat => {
-      console.log('currency count: ', dat);
-      this.esQuery.size = dat.aggregations.cnt_currency.value;
-      this.dataSource$ = this.searchESService.search('exchangerate', this.esQuery).pipe(map(dat => {
-        const srcData = dat.hits.hits.map(it => it._source);
-        this.columnsToDisplay = Object.keys(srcData[0]);
-        console.log('response data', srcData, this.columnsToDisplay);
-        return srcData;
-      }));
+    this.searchESService.search('exchangerate', this.esQuery).pipe(map(res => {
+      return res.aggregations.group.buckets.map(it => it.group_docs.hits.hits[0]._source);
+    })).subscribe(dat => {
+      this.columnsToDisplay = Object.keys(dat[0]);
+      this.dataSource = new MatTableDataSource(dat);
+      this.dataSource.sort = this.sort;
     });
   }
 

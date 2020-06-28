@@ -13,9 +13,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 import { HttpClientModule } from '@angular/common/http';
 import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
 import { ExchangeRateComponent } from './components/exchange-rate/exchange-rate.component';
 import { RealEstateComponent } from './components/real-estate/real-estate.component';
 import { StocksComponent } from './components/stocks/stocks.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { StocksComponent } from './components/stocks/stocks.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule,MatTableModule 
+    MatToolbarModule, MatIconModule, MatSidenavModule
+    , MatListModule, MatButtonModule,MatTableModule, MatSortModule
+    , MatFormFieldModule, MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
