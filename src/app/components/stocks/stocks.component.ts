@@ -54,7 +54,7 @@ export class StocksComponent implements OnInit {
       const firstComes = ['name', 'code'];
       this.latestPrices = new MatTableDataSource(dat);
       this.latestPrices.sort = this.sort;
-      this.columnsToDiplay = firstComes.concat(Object.keys(this.latestPrices[0]).filter(nm => !firstComes.includes(nm)));      
+      this.columnsToDiplay = firstComes.concat(Object.keys(dat[0]).filter(nm => !firstComes.includes(nm)));      
       console.log("stock prices: ", this.latestPrices);
     });
   }
