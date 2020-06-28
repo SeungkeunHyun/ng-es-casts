@@ -15,6 +15,11 @@ export class StocksComponent implements OnInit {
   columnsToDiplay: string[];
   esQuery = {
     "size": 0,
+    "query": {
+      "exists": {
+        "field": "timestamp"
+      }
+    },
     "aggs": {
       "group": {
         "terms": {
@@ -27,7 +32,7 @@ export class StocksComponent implements OnInit {
               "size": 1,
               "sort": [
                 {
-                  "time.keyword": {
+                  "timestamp": {
                     "order": "desc"
                   }
                 }
