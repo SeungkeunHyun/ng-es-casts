@@ -5,14 +5,14 @@
       <h1>SimpleCRM</h1>
       <span class="menu-spacer"></span>
       <mat-nav-list>
-        <mat-list-item *ngFor="let mitem of menus"> <a matLine [routerLink]="'/' + mitem.replace(' ', '-')"> {{mitem}} </a></mat-list-item>
+        <mat-list-item *ngFor="let mitem of menus"> <a matLine [routerLink]="'/' + mitem.replace(' ', '-')" routerLinkActive="active"> {{mitem}} </a></mat-list-item>
       </mat-nav-list>
   </mat-toolbar>
   <mat-sidenav-container>
     <mat-sidenav #sidenav>
       <mat-nav-list>
   
-        <a *ngFor="let mitem of menus" mat-list-item [routerLink]="'/' + mitem"> {{mitem}} </a>
+        <a *ngFor="let mitem of menus" mat-list-item [routerLink]="'/' + mitem" routerLinkActive="active"> {{mitem}} </a>
         <a mat-list-item (click)="sidenav.toggle()" href="" mat-list-item>Close</a>
   
       </mat-nav-list>

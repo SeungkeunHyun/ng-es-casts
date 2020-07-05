@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchESService } from 'src/app/core/services/search-es.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-toolbar',
@@ -8,9 +8,10 @@ import { SearchESService } from 'src/app/core/services/search-es.service';
 })
 export class MainToolbarComponent implements OnInit {
   private exchangeRates: Object[];
-  constructor(private searchESService: SearchESService) { }
+  constructor(private route: ActivatedRoute) { }
   menus = ['exchange rate', 'realestate', 'stocks'];
   ngOnInit(): void {
   }
 
 }
+ 

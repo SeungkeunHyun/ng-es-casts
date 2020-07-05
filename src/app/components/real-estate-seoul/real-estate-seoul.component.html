@@ -1,0 +1,27 @@
+<div class="example-container">
+    <mat-form-field appearance="fill">
+        <mat-label>행정구역</mat-label>
+        <mat-select (selectionChange)="filterSGG($event.value)">
+            <mat-option value="{{sgg}}" *ngFor="let sgg of sggs">{{sgg}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>거래년도</mat-label>
+        <mat-select (selectionChange)="filterYear($event.value)">
+            <mat-option value="{{yr}}" *ngFor="let yr of dealYears">{{yr}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilterSeoul($event)" placeholder="Ex. ium" #input>
+</mat-form-field>
+<table mat-table [dataSource]="seoulDataSource" matSort style="width:100%" class="mat-elevation-z8">
+    <ng-container [matColumnDef]="column" *ngFor="let column of seoulColumns">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="seoulColumns;sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: seoulColumns;"></tr>
+</table>

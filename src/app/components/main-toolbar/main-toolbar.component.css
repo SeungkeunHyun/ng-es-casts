@@ -2,3 +2,7 @@ mat-nav-list {
     display: flex;
     flex-direction: row;
    }
+
+.mat-nav-list a.active {
+    color: cyan;
+}

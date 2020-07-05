@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { SearchESService } from 'src/app/core/services/search-es.service';
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,11 +13,23 @@ export class StocksComponent implements OnInit {
   latestPrices: MatTableDataSource<Object[]>;
   indexName = 'stock.prices';
   columnsToDiplay: string[];
+  @Output() isLoading = new EventEmitter<boolean>();
   esQuery = {
     "size": 0,
     "query": {
-      "exists": {
-        "field": "timestamp"
+      "bool": {
+        "must": [
+          {
+            "exists": {
+              "field": "timestamp"
+            }
+          },
+          {
+            "exists": {
+              "field": "negoprice"
+            }
+          },
+        ]
       }
     },
     "aggs": {
@@ -44,17 +56,19 @@ export class StocksComponent implements OnInit {
     }
   };
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(private searchESService: SearchESService) { }
-  
+
   ngOnInit(): void {
-    this.searchESService.search(this.indexName, this.esQuery).pipe(map((res:any)=> {
+    this.isLoading.emit(true);
+    this.searchESService.search(this.indexName, this.esQuery).pipe(map((res: any) => {
       return res.aggregations.group.buckets.map(it => it.group_docs.hits.hits[0]._source);
-  })).subscribe(dat => {
+    })).subscribe(dat => {
+      this.isLoading.emit(false);
       const firstComes = ['name', 'code'];
       this.latestPrices = new MatTableDataSource(dat);
       this.latestPrices.sort = this.sort;
-      this.columnsToDiplay = firstComes.concat(Object.keys(dat[0]).filter(nm => !firstComes.includes(nm)));      
+      this.columnsToDiplay = firstComes.concat(Object.keys(dat[0]).filter(nm => !firstComes.includes(nm)));
       console.log("stock prices: ", this.latestPrices);
     });
   }

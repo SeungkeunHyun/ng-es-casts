@@ -1,13 +1,9 @@
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-</mat-form-field>
-<table mat-table [dataSource]="dataSource" matSort style="width:100%" class="mat-elevation-z8">
-    <ng-container [matColumnDef]="column" *ngFor="let column of columnsToDisplay">
-      <th mat-header-cell *matHeaderCellDef  mat-sort-header> {{column}} </th>
-      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
-    </ng-container>
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Gov">
+      <app-real-estate-gov></app-real-estate-gov>
+    </mat-tab>
+    <mat-tab label="Seoul">
+      <app-real-estate-seoul></app-real-estate-seoul>
+    </mat-tab>
+  </mat-tab-group>
   
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-  </table>

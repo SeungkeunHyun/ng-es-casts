@@ -19,6 +19,13 @@ import { RealEstateComponent } from './components/real-estate/real-estate.compon
 import { StocksComponent } from './components/stocks/stocks.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import {MatCardModule} from '@angular/material/card';
+import { CommonSpinnerComponent } from './components/common-spinner/common-spinner.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatSelectModule} from '@angular/material/select';
+import { RealEstateGovComponent } from './components/real-estate-gov/real-estate-gov.component';
+import { RealEstateSeoulComponent } from './components/real-estate-seoul/real-estate-seoul.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +33,10 @@ import { MatInputModule } from '@angular/material/input';
     MainToolbarComponent,
     ExchangeRateComponent,
     RealEstateComponent,
-    StocksComponent
+    StocksComponent,
+    CommonSpinnerComponent,
+    RealEstateGovComponent,
+    RealEstateSeoulComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +45,8 @@ import { MatInputModule } from '@angular/material/input';
     HttpClientModule,
     MatToolbarModule, MatIconModule, MatSidenavModule
     , MatListModule, MatButtonModule,MatTableModule, MatSortModule
-    , MatFormFieldModule, MatInputModule
+    , MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatCardModule
+    , MatTabsModule, MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

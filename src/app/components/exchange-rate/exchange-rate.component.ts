@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { SearchESService } from 'src/app/core/services/search-es.service';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -14,6 +13,7 @@ export class ExchangeRateComponent implements OnInit {
   dataSource: MatTableDataSource<Object[]>;
   columnsToDisplay: Object[];
   currency_count: number = 0;
+  @Output() isLoading = new EventEmitter<boolean>();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   esQuery = {
     "size": 0,
@@ -53,9 +53,11 @@ export class ExchangeRateComponent implements OnInit {
   constructor(private searchESService: SearchESService) { }
 
   ngOnInit(): void {
+    this.isLoading.emit(true);
     this.searchESService.search('exchangerate', this.esQuery).pipe(map(res => {
       return res.aggregations.group.buckets.map(it => it.group_docs.hits.hits[0]._source);
     })).subscribe(dat => {
+      this.isLoading.emit(false);
       this.columnsToDisplay = Object.keys(dat[0]);
       this.dataSource = new MatTableDataSource(dat);
       this.dataSource.sort = this.sort;
