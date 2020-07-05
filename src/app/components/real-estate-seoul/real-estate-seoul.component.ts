@@ -15,6 +15,8 @@ export class RealEstateSeoulComponent implements OnInit {
   seoulColumns: string[];
   sggs: string[];
   dealYears: string[];
+  sgg: string = '';
+  yr: number;
   seoulESQuery = {
     "size": 1000,
     "query": null,
@@ -38,7 +40,7 @@ export class RealEstateSeoulComponent implements OnInit {
       }
     }
   };
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(private searchESService: SearchESService) { }
 
   ngOnInit(): void {
@@ -46,17 +48,17 @@ export class RealEstateSeoulComponent implements OnInit {
   }
 
   initSeoulDataSource() {
-    if(this.seoulESQuery.query === null) {
-      this.seoulESQuery.query = {"match_all": {}};
+    if (this.seoulESQuery.query === null) {
+      this.seoulESQuery.query = { "match_all": {} };
     }
     this.searchESService.search('seoul.realestate.trade', this.seoulESQuery).pipe(map(res => {
       console.log(res);
-      if(this.sggs == null) {
+      if (this.sggs == null) {
         this.sggs = res.aggregations.cnt_sgg.buckets.map(it => it.key).sort();
         this.seoulColumns = Object.keys(res.hits.hits[0]._source);
-        this.dealYears = res.aggregations.deal_yrs.buckets.map(it => it.key_as_string.substring(0,4)).sort((a,b) => b - a);
+        this.dealYears = res.aggregations.deal_yrs.buckets.map(it => parseInt(it.key_as_string.substring(0, 4))).sort((a, b) => b - a);
         console.log(this.seoulColumns, this.sggs, this.dealYears);
-      }      
+      }
       return res.hits.hits.map(it => it._source);
     })).subscribe(dat => {
       dat = dat.map(it => {
@@ -71,14 +73,41 @@ export class RealEstateSeoulComponent implements OnInit {
 
   filterSGG(sgg) {
     delete this.seoulESQuery.query;
-    this.seoulESQuery.query = {term: {'SGG_NM.keyword': sgg}};
+    this.seoulESQuery.query = { term: { 'SGG_NM.keyword': sgg } };
     this.initSeoulDataSource();
   }
 
-  filterYear(yr) {
-    //delete this.seoulESQuery.query;
+  filterDeals() {
+    console.log(this.sgg, this.yr);
+    let mustFilters = [];
+    if (this.yr != null) {
+      const yrQuery = {
+        "range": {
+          "DEAL_YMD": {
+            "gte": `${this.yr}||/y`,
+            "lte": `${this.yr}||/y`,
+            "format": "yyyy"
+          }
+        }
+      };
+      mustFilters.push(yrQuery);
+    }
+    if (this.sgg != null && this.sgg.length > 0) {
+      const termQuery = {
+        "term": {
+          "SGG_NM.keyword": this.sgg
+        }
+      };
+      mustFilters.push(termQuery);
+    }
+    if (mustFilters.length > 0) {
+      this.seoulESQuery.query = { "bool": { "must": mustFilters } }
+    } else {
+      this.seoulESQuery.query = { "match_all": {} };
+    }
     //this.seoulESQuery.query = {term: {'SGG_NM.keyword': sgg}};
-    //this.initSeoulDataSource();
+    console.log(this.seoulESQuery);
+    this.initSeoulDataSource();
   }
 
   applyFilterSeoul(event: Event) {

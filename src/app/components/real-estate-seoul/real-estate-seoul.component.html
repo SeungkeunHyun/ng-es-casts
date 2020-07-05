@@ -1,13 +1,13 @@
 <div class="example-container">
     <mat-form-field appearance="fill">
         <mat-label>행정구역</mat-label>
-        <mat-select (selectionChange)="filterSGG($event.value)">
+        <mat-select [(ngModel)]="sgg" (selectionChange)="filterDeals()">
             <mat-option value="{{sgg}}" *ngFor="let sgg of sggs">{{sgg}}</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
         <mat-label>거래년도</mat-label>
-        <mat-select (selectionChange)="filterYear($event.value)">
+        <mat-select [(ngModel)]="yr" (selectionChange)="filterDeals()">
             <mat-option value="{{yr}}" *ngFor="let yr of dealYears">{{yr}}</mat-option>
         </mat-select>
     </mat-form-field>
