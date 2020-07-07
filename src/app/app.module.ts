@@ -27,6 +27,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { RealEstateGovComponent } from './components/real-estate-gov/real-estate-gov.component';
 import { RealEstateSeoulComponent } from './components/real-estate-seoul/real-estate-seoul.component';
 import { FormsModule } from '@angular/forms';
+import { NpnSliderModule } from "npn-slider";
+import {MatSliderModule} from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,7 @@ import { FormsModule } from '@angular/forms';
     , MatListModule, MatButtonModule,MatTableModule, MatSortModule
     , MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatCardModule
     , MatTabsModule, MatSelectModule, FormsModule
+    , NpnSliderModule, MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "ng-es-casts"
+  "defaultProject": "ng-es-casts",
+  "cli": {
+    "analytics": false
+  }
 }

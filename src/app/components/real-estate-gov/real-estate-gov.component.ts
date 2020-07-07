@@ -27,7 +27,7 @@ export class RealEstateGovComponent implements OnInit {
       console.log(res);
       this.columnsToDisplay = Object.keys(res.hits.hits[0]._source);
       console.log(this.columnsToDisplay);
-      return res.hits.hits.map(it => it._source);
+      return res.hits.hits.map(it => it._source).map(it => {it.price = it.price.toLocaleString(); return it;});
     })).subscribe((dat:any) => {
       this.isLoading.emit(false);
       this.dataSource = new MatTableDataSource(dat);
@@ -40,7 +40,10 @@ export class RealEstateGovComponent implements OnInit {
     this.initGovDataSource();
   }
 
-  applyFilter(event: Event) {
+  applyFilter(evt: KeyboardEvent) {
+    if(evt.key != 'Enter') {
+      return;
+    }
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
