@@ -3,6 +3,7 @@ import { SearchESService } from 'src/app/core/services/search-es.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { map } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
+import { SpinnerService } from 'src/app/core/services/spinner-service.service';
 
 @Component({
   selector: 'app-real-estate-seoul',
@@ -64,13 +65,14 @@ export class RealEstateSeoulComponent implements OnInit {
     }
   };
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  constructor(private searchESService: SearchESService) { }
+  constructor(private searchESService: SearchESService, private spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
     this.initSeoulDataSource();
   }
 
   initSeoulDataSource() {
+    this.spinnerService.showSpinner.next(true);
     if (this.seoulESQuery.query === null) {
       this.seoulESQuery.query = { "match_all": {} };
     }
@@ -92,9 +94,9 @@ export class RealEstateSeoulComponent implements OnInit {
         it.OBJ_AMT = it.OBJ_AMT.toLocaleString();
         return it;
       });
-      this.isLoading.emit(false);
       this.seoulDataSource = new MatTableDataSource(dat);
       this.seoulDataSource.sort = this.sort;
+      this.spinnerService.showSpinner.next(false);      
     });
   }
 

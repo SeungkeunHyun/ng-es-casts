@@ -3,6 +3,7 @@ import { SearchESService } from 'src/app/core/services/search-es.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { map } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
+import { SpinnerService } from 'src/app/core/services/spinner-service.service';
 
 @Component({
   selector: 'app-real-estate-gov',
@@ -17,10 +18,15 @@ export class RealEstateGovComponent implements OnInit {
     "size": 2000,
     "query": {
       "match_all": {}
+    },
+    "sort": {
+      "tradeDate.keyword": {
+        "order": "desc"
+      }
     }
   };
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  constructor(private searchESService: SearchESService) { }
+  constructor(private searchESService: SearchESService, private spinnerService: SpinnerService) { }
 
   initGovDataSource() {
     this.searchESService.search('realestate.trade', this.esQuery).pipe(map(res => {
@@ -29,14 +35,14 @@ export class RealEstateGovComponent implements OnInit {
       console.log(this.columnsToDisplay);
       return res.hits.hits.map(it => it._source).map(it => {it.price = it.price.toLocaleString(); return it;});
     })).subscribe((dat:any) => {
-      this.isLoading.emit(false);
+      this.spinnerService.showSpinner.next(false);
       this.dataSource = new MatTableDataSource(dat);
       this.dataSource.sort = this.sort;
     });
   }
 
   ngOnInit(): void {
-    this.isLoading.emit(true);
+    this.spinnerService.showSpinner.next(true);
     this.initGovDataSource();
   }
 

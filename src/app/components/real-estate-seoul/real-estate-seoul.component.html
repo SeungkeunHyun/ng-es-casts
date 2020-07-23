@@ -17,7 +17,10 @@
             <mat-option value="{{tp}}" *ngFor="let tp of bldgTypes">{{tp}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <npn-slider matInput [(ngModel)]="bldgSize" min="{{minSize}}" max="{{maxSize}}" (onChange)="filterDeals()"></npn-slider>
+    <mat-form-field appearance="fill">
+        <mat-label>실면적</mat-label>
+        <input matInput type="number"  [(ngModel)]="bldgSize" (change)="filterDeals()">
+    </mat-form-field>
 </div>
 <mat-form-field>
     <mat-label>Filter</mat-label>

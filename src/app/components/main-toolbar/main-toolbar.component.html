@@ -2,7 +2,7 @@
       <button mat-icon-button>
         <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
       </button>
-      <h1>SimpleCRM</h1>
+      <h1>OpenAPI</h1>
       <span class="menu-spacer"></span>
       <mat-nav-list>
         <mat-list-item *ngFor="let mitem of menus"> <a matLine [routerLink]="'/' + mitem.replace(' ', '-')" routerLinkActive="active"> {{mitem}} </a></mat-list-item>

@@ -3,6 +3,7 @@ import { SearchESService } from 'src/app/core/services/search-es.service';
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { SpinnerService } from 'src/app/core/services/spinner-service.service';
 
 @Component({
   selector: 'app-exchange-rate',
@@ -50,17 +51,17 @@ export class ExchangeRateComponent implements OnInit {
       }
     }
   };
-  constructor(private searchESService: SearchESService) { }
+  constructor(private searchESService: SearchESService, private spinnerService: SpinnerService) { }
 
   ngOnInit(): void {
-    this.isLoading.emit(true);
+    this.spinnerService.showSpinner.next(true);
     this.searchESService.search('exchangerate', this.esQuery).pipe(map(res => {
       return res.aggregations.group.buckets.map(it => it.group_docs.hits.hits[0]._source);
     })).subscribe(dat => {
-      this.isLoading.emit(false);
       this.columnsToDisplay = Object.keys(dat[0]);
       this.dataSource = new MatTableDataSource(dat);
       this.dataSource.sort = this.sort;
+      this.spinnerService.showSpinner.next(false);
     });
   }
 
